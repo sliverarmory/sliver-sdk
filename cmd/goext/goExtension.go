@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	goExtCmd = &cobra.Command{
+	goVersionFlag string
+	goExtCmd      = &cobra.Command{
 		Use:   "go PKG_NAME EXTENSION_NAME",
 		Short: "Create a new Go extension",
 		Long: `Create a new Go extension package.
@@ -21,7 +22,7 @@ PKG_NAME is the name of the Go package and EXTENSION_NAME is the name of the ext
 			}
 			pkgName := args[0]
 			extName := args[1]
-			zipData, err := goext.RenderGoTemplate(pkgName, extName)
+			zipData, err := goext.RenderGoTemplate(pkgName, extName, goVersionFlag)
 			if err != nil {
 				return err
 			}
@@ -36,5 +37,6 @@ PKG_NAME is the name of the Go package and EXTENSION_NAME is the name of the ext
 )
 
 func NewGoExtensionCmd() *cobra.Command {
+	goExtCmd.Flags().StringVarP(&goVersionFlag, "go-version", "g", "1.21", "Go version to use")
 	return goExtCmd
 }

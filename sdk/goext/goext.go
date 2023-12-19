@@ -13,13 +13,15 @@ import (
 )
 
 const (
-	extPlaceholder = "myextension"
-	goFolderName   = "go"
+	extPlaceholder   = "myextension"
+	goFolderName     = "go"
+	defaultGoVersion = "1.21"
 )
 
 type GoExtension struct {
 	ExtensionName string
 	PackageName   string
+	GoVersion     string
 }
 
 func validateExtname(extName string) bool {
@@ -32,7 +34,7 @@ func validatePkgName(pkgName string) bool {
 	return !regex.Match([]byte(pkgName))
 }
 
-func RenderGoTemplate(pkgName, extName string) ([]byte, error) {
+func RenderGoTemplate(pkgName, extName, goVersion string) ([]byte, error) {
 
 	if !validateExtname(extName) {
 		return nil, sdk.ErrInvalidExtName
@@ -43,8 +45,15 @@ func RenderGoTemplate(pkgName, extName string) ([]byte, error) {
 
 	buf := new(bytes.Buffer)
 	zipWriter := zip.NewWriter(buf)
+	if goVersion == "" {
+		goVersion = defaultGoVersion
+	}
 	// Add go.mod
-	goModBytes, err := genGoMod(pkgName)
+	goModBytes, err := genGoMod(GoExtension{
+		ExtensionName: extName,
+		PackageName:   pkgName,
+		GoVersion:     goVersion,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -81,6 +90,7 @@ func RenderGoTemplate(pkgName, extName string) ([]byte, error) {
 			data := GoExtension{
 				ExtensionName: extName,
 				PackageName:   pkgName,
+				GoVersion:     goVersion,
 			}
 			execErr := fTemp.Execute(f, data)
 			if err != nil {
@@ -99,21 +109,17 @@ func RenderGoTemplate(pkgName, extName string) ([]byte, error) {
 // genGoMod generates a go.mod file to add to the
 // extension package because we can't include one
 // in the template folder, otherwise embed won't work
-func genGoMod(pkgName string) ([]byte, error) {
+func genGoMod(goExt GoExtension) ([]byte, error) {
 	goModTmpl := `module {{.PackageName}}
 
-go 1.21
+go {{.GoVersion}}}
 	`
 	tmpl, err := template.New("go.mod").Parse(goModTmpl)
 	if err != nil {
 		return nil, err
 	}
 	buf := new(bytes.Buffer)
-	err = tmpl.Execute(buf, struct {
-		PackageName string
-	}{
-		PackageName: pkgName,
-	})
+	err = tmpl.Execute(buf, goExt)
 	if err != nil {
 		return nil, err
 	}
