@@ -21,5 +21,5 @@ Flags:
 
 Use "sliver-sdk [command] --help" for more information about a command.
 $ sliver-sdk new go github.com/sliverarmory/hello-world hello-word
-[*] Your extension package ready: hello-worl.zip
+[*] Your extension package ready: hello-world.zip
 ```
