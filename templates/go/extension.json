@@ -1,0 +1,43 @@
+{
+    "name": "{{.ExtensionName}}",
+    "version": "0.0.1",
+    "extension_author": "your-name",
+    "original_author": "orig-author-name",
+    "repo_url": "some URL",
+    "commands": [
+        {
+            "command_name": "my-ext-cmd1",
+            "help": "my super command 1",
+            "entrypoint": "RunCmd1",
+            "files": [
+                {
+                    "os": "windows",
+                    "arch": "amd64",
+                    "path": "ext.x64.dll"
+                },
+                {
+                    "os": "windows",
+                    "arch": "386",
+                    "path": "ext.x86.dll"
+                }
+            ]
+        },
+        {
+            "command_name": "my-ext-cmd2",
+            "help": "my super command 2",
+            "entrypoint": "RunCmd2",
+            "files": [
+                {
+                    "os": "windows",
+                    "arch": "amd64",
+                    "path": "ext.x64.dll"
+                },
+                {
+                    "os": "windows",
+                    "arch": "386",
+                    "path": "ext.x86.dll"
+                }
+            ]
+        }
+    ]
+}
