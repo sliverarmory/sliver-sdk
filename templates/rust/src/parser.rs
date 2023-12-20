@@ -1,18 +1,36 @@
+use std::error::Error;
 use std::io::Write;
-use std::os::raw::c_void;
-use std::ptr;
 
 pub struct DataParser {
-    original: Vec<u8>,
-    n: usize,
+    pub original: Vec<u8>,
+    pub n: usize,
 }
 
 impl DataParser {
+    pub fn from_vec(v: Vec<u8>) -> DataParser {
+        // Start at 4 to skip the length of the whole buffer
+        DataParser { original: v, n: 4 }
+    }
+
     pub fn get_data_length(&self) -> usize {
         self.original.len() - self.n
     }
 
-    pub fn get_next_u16(&mut self) -> Result<u16, &'static str> {
+    pub fn get_u32(&mut self) -> Result<u32, &'static str> {
+        if self.get_data_length() < 4 {
+            return Err("no more data to return");
+        }
+        let r = u32::from_le_bytes([
+            self.original[self.n],
+            self.original[self.n + 1],
+            self.original[self.n + 2],
+            self.original[self.n + 3],
+        ]);
+        self.n += 4;
+        Ok(r)
+    }
+
+    pub fn get_u16(&mut self) -> Result<u16, &'static str> {
         if self.get_data_length() < 2 {
             return Err("no more data to return");
         }
@@ -21,27 +39,44 @@ impl DataParser {
         Ok(r)
     }
 
-    pub fn get_string(&mut self, length: usize) -> Result<String, &'static str> {
-        if self.get_data_length() < length {
-            return Err("no more data to return");
-        }
-        let result = str::from_utf8(&self.original[self.n..self.n + length]);
-        match result {
-            Ok(v) => {
-                self.n += length;
-                Ok(v.to_string())
-            }
-            Err(_e) => Err("failed to convert bytes to string"),
-        }
+    pub fn get_string(&mut self) -> Result<String, Box<dyn Error>> {
+        // get_data
+        let out_str = self.get_data()?;
+        let decoded = String::from_utf8(out_str)?;
+        Ok(decoded)
     }
 
-    pub fn get_data(&mut self, length: usize) -> Result<Vec<u8>, &'static str> {
-        if self.get_data_length() < length {
-            return Err("no more data to return");
+    pub fn get_wstring(&mut self) -> Result<String, Box<dyn Error>> {
+        let rb = self.get_data()?;
+        // convert to [u16]
+        let decoded: Vec<u16> = rb
+            .chunks_exact(2)
+            .into_iter()
+            .map(|a| u16::from_ne_bytes([a[0], a[1]]))
+            .collect();
+        let decoded = decoded.as_slice();
+        let decoded = String::from_utf16_lossy(decoded);
+        Ok(decoded)
+    }
+
+    pub fn get_data(&mut self) -> Result<Vec<u8>, Box<dyn Error>> {
+        if self.get_data_length() < 4 {
+            return Err("no more data to return".into());
         }
-        let result = self.original[self.n..self.n + length].to_vec();
-        self.n += length;
-        Ok(result)
+        //extract the length
+        let l = u32::from_le_bytes(self.original[self.n..self.n + 4].try_into()?);
+        //increment n
+        self.n += 4;
+        //copy to a new buffer to avoid mutating the underlying state
+        if self.get_data_length() < l as usize {
+            return Err("no more data to return".into());
+        }
+        let mut rb = vec![0; l as usize];
+        rb.copy_from_slice(&self.original[self.n..self.n + l as usize]);
+        //increment n
+        self.n += l as usize;
+
+        Ok(rb)
     }
 }
 
@@ -52,7 +87,7 @@ pub struct OutputBuffer {
 }
 
 impl OutputBuffer {
-    pub fn new(callback: extern "C" fn(*mut u8, u64)) -> OutputBuffer {
+    pub fn from_callback(callback: extern "C" fn(*mut u8, u64)) -> OutputBuffer {
         OutputBuffer {
             b: Vec::new(),
             done: false,

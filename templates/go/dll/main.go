@@ -9,6 +9,11 @@ import (
 	"{{.PackageName}}/pkg/{{.ExtensionName}}"
 )
 
+const (
+	Success = 0
+	Error = 1
+)
+
 // This is the entrypoint called by the Sliver implant at runtime.
 // Arguments are passed in via the `data` parameter as a byte array of size `dataLen`.
 // Use the OutputBuffer.SendOutput() and OutputBuffer.SendError() methods to
@@ -49,10 +54,10 @@ func Run(data uintptr, dataLen uintptr, callback uintptr) uintptr {
 	output, err := {{.ExtensionName}}.DoStuff(stringArg)
 	if err != nil {
 		sendError(err, callback)
-		return 1
+		return Error
 	}
 	sendOutput(output, callback)
-	return 0
+	return Success
 }
 
 func main() {}

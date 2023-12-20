@@ -1,0 +1,26 @@
+{
+    "name": "{{.ExtensionName}}",
+    "version": "0.0.1",
+    "extension_author": "your-name",
+    "original_author": "orig-author-name",
+    "repo_url": "some URL",
+    "commands": [
+        {
+            "command_name": "my-ext-cmd1",
+            "help": "my super command 1",
+            "entrypoint": "start",
+            "files": [
+                {
+                    "os": "windows",
+                    "arch": "amd64",
+                    "path": "ext.x64.dll"
+                },
+                {
+                    "os": "windows",
+                    "arch": "386",
+                    "path": "ext.x86.dll"
+                }
+            ]
+        }
+    ]
+}
