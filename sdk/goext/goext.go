@@ -113,6 +113,10 @@ func genGoMod(goExt GoExtension) ([]byte, error) {
 	goModTmpl := `module {{.PackageName}}
 
 go {{.GoVersion}}}
+
+require (
+	golang.org/x/text v0.14.0
+)
 	`
 	tmpl, err := template.New("go.mod").Parse(goModTmpl)
 	if err != nil {

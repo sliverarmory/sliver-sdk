@@ -6,6 +6,8 @@ import (
 	"strings"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/text/encoding/unicode"
 )
 
 type DataParser struct {
@@ -32,7 +34,17 @@ func (dp *DataParser) GetString() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return string(outStr), nil
+	// strings are NULL terminated, so we remove the NULL byte here
+	return string(outStr[:len(outStr)-1]), nil
+}
+
+func (dp *DataParser) GetWString() (string, error) {
+	outStr, err := dp.GetData()
+	if err != nil {
+		return "", err
+	}
+	decoder := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewDecoder()
+	return decoder.Bytes(outStr[:len(outStr)-2]) //strip trailing nulls before decoding
 }
 
 // GetData returns a slice of bytes. The underlying data could be a string, a file, etc.
