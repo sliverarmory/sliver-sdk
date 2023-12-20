@@ -2,11 +2,11 @@ mod parser;
 
 // Use this file for local debugging
 
-const data_source: &str = "CHANGE_ME";
+const DATA_SOURCE: &str = "CHANGE_ME";
 
 fn main() {
     // read args from file
-    let args = std::fs::read(data_source).unwrap();
+    let args = std::fs::read(DATA_SOURCE).unwrap();
     // create a new DataParser
     let mut parser = parser::ArgumentParser::from_vec(args);
     // get the first argument
