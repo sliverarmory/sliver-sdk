@@ -1,15 +1,20 @@
 use std::error::Error;
 use std::io::Write;
 
-pub struct DataParser {
+pub struct ArgumentParser {
     pub original: Vec<u8>,
     pub n: usize,
 }
 
-impl DataParser {
-    pub fn from_vec(v: Vec<u8>) -> DataParser {
+impl ArgumentParser {
+    pub fn from_vec(v: Vec<u8>) -> ArgumentParser {
         // Start at 4 to skip the length of the whole buffer
-        DataParser { original: v, n: 4 }
+        ArgumentParser { original: v, n: 4 }
+    }
+
+    pub fn from_ptr(data: *mut u8, size: u64) -> ArgumentParser {
+        let v = unsafe { std::slice::from_raw_parts(data, size as usize) };
+        ArgumentParser::from_vec(v.to_vec())
     }
 
     pub fn get_data_length(&self) -> usize {

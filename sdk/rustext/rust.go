@@ -3,10 +3,10 @@ package rustext
 import (
 	"archive/zip"
 	"bytes"
-	"html/template"
 	"io/fs"
 	"regexp"
 	"strings"
+	"text/template"
 
 	"github.com/bishopfox/sliver-sdk/sdk"
 	"github.com/bishopfox/sliver-sdk/templates"
