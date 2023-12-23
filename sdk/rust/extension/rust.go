@@ -35,7 +35,7 @@ func RenderRustTemplate(extName string) ([]byte, error) {
 	zipWriter := zip.NewWriter(buf)
 	// Add go.mod
 	// Walk the templates directory and write each file to the zip archive
-	walkErr := fs.WalkDir(templates.RustTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
+	walkErr := fs.WalkDir(templates.RustExtensionTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
 		zipPath := path
 		// remove the top level "go" folder
 		zipPath = strings.Replace(zipPath, rustFolderName+"/", "", 1)
@@ -52,7 +52,7 @@ func RenderRustTemplate(extName string) ([]byte, error) {
 			return zipErr
 		}
 		if !d.IsDir() {
-			fTemp, parseErr := template.ParseFS(templates.RustTemplates, path)
+			fTemp, parseErr := template.ParseFS(templates.RustExtensionTemplates, path)
 			if err != nil {
 				return parseErr
 			}

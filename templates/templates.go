@@ -5,10 +5,10 @@ import (
 )
 
 //go:embed extensions/go/**
-var GoTemplates embed.FS
+var GoExtensionTemplates embed.FS
 
 //go:embed extensions/rust/**
-var RustTemplates embed.FS
+var RustExtensionTemplates embed.FS
 
-//go:embed traffic_encoders/rust/**
+//go:embed encoders/rust/**
 var RustTrafficEncoderTemplates embed.FS

@@ -16,7 +16,7 @@ var (
 EXTENSION_NAME is the name of the extension.
 
 EXTENSION_NAME can only contain alphanumeric characters and underscores.`,
-		Example: "sliver-sdk new rust my-sliver-ext",
+		Example: "sliver-sdk new-extension rust my-sliver-ext",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
 				return errors.New("invalid number of arguments")
@@ -38,4 +38,36 @@ EXTENSION_NAME can only contain alphanumeric characters and underscores.`,
 
 func NewRustExtensionCmd() *cobra.Command {
 	return rustExtCmd
+}
+
+var (
+	rustEncCmd = &cobra.Command{
+		Use:   "rust ENCODER_NAME",
+		Short: "Create a new Rust traffic encoder",
+		Long: `Create a new Rust traffic encoder package.
+ENCODER_NAME is the name of the traffic encoder.
+
+ENCODER_NAME can only contain alphanumeric characters and underscores.`,
+		Example: "sliver-sdk new-encoder rust my-encoder",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if len(args) != 1 {
+				return errors.New("invalid number of arguments")
+			}
+			encName := args[0]
+			zipData, err := rustext.RenderRustTemplate(encName)
+			if err != nil {
+				return err
+			}
+			err = os.WriteFile(encName+".zip", zipData, 0644)
+			if err != nil {
+				return err
+			}
+			cmd.Printf("[*] Your encoder package ready: %s.zip\n", encName)
+			return nil
+		},
+	}
+)
+
+func NewRustEncoderCmd() *cobra.Command {
+	return rustEncCmd
 }

@@ -7,18 +7,18 @@ use std::alloc::{alloc, dealloc, Layout};
 use std::slice;
 
 fn encode(input: &[u8]) -> Vec<u8> {
-    let mut output: Vec<u8> = vec![0; input.len() * 2];
-    hex::encode_to_slice(input, &mut output).unwrap();
+    let output = input.to_vec();
+    // Encode method here
     return output;
 }
 
 fn decode(input: &[u8]) -> Vec<u8> {
-    let mut output: Vec<u8> = vec![0; input.len() / 2];
-    hex::decode_to_slice(input, &mut output).unwrap();
+    let output = input.to_vec();
+    // Decode method here
     return output;
 }
 
-#[link(wasm_import_module = "hex")]
+#[link(wasm_import_module = "rename")]
 extern "C" {
     #[link_name = "log"]
     fn _log(ptr: u32, size: u32);

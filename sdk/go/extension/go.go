@@ -66,7 +66,7 @@ func RenderGoTemplate(pkgName, extName, goVersion string) ([]byte, error) {
 		return nil, err
 	}
 	// Walk the templates directory and write each file to the zip archive
-	walkErr := fs.WalkDir(templates.GoTemplates, goFolderName, func(path string, d fs.DirEntry, err error) error {
+	walkErr := fs.WalkDir(templates.GoExtensionTemplates, goFolderName, func(path string, d fs.DirEntry, err error) error {
 		zipPath := path
 		// remove the top level "go" folder
 		zipPath = strings.Replace(zipPath, goFolderName+"/", "", 1)
@@ -83,7 +83,7 @@ func RenderGoTemplate(pkgName, extName, goVersion string) ([]byte, error) {
 			return zipErr
 		}
 		if !d.IsDir() {
-			fTemp, parseErr := template.ParseFS(templates.GoTemplates, path)
+			fTemp, parseErr := template.ParseFS(templates.GoExtensionTemplates, path)
 			if err != nil {
 				return parseErr
 			}

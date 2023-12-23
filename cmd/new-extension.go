@@ -9,7 +9,7 @@ import (
 
 // newExtensionCmd represents the newExtension command
 var newExtensionCmd = &cobra.Command{
-	Use:   "new",
+	Use:   "new-extension",
 	Short: "Create a new extension",
 	Run: func(cmd *cobra.Command, args []string) {
 	},
