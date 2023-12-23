@@ -13,7 +13,3 @@ var newEncoderCmd = &cobra.Command{
 	ValidArgs: []string{"rust"},
 	Args:      cobra.OnlyValidArgs,
 }
-
-func init() {
-	rootCmd.AddCommand(newEncoderCmd)
-}

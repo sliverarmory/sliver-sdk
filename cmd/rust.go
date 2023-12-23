@@ -54,14 +54,14 @@ ENCODER_NAME can only contain alphanumeric characters and underscores.`,
 				return errors.New("invalid number of arguments")
 			}
 			encName := args[0]
-			zipData, err := rustext.RenderRustTemplate(encName)
-			if err != nil {
-				return err
-			}
-			err = os.WriteFile(encName+".zip", zipData, 0644)
-			if err != nil {
-				return err
-			}
+			// zipData, err := rustext.RenderRustTemplate(encName)
+			// if err != nil {
+			// 	return err
+			// }
+			// err = os.WriteFile(encName+".zip", zipData, 0644)
+			// if err != nil {
+			// 	return err
+			// }
 			cmd.Printf("[*] Your encoder package ready: %s.zip\n", encName)
 			return nil
 		},

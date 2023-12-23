@@ -16,9 +16,3 @@ var newExtensionCmd = &cobra.Command{
 	ValidArgs: []string{"go", "rust", "nim", "c"},
 	Args:      cobra.OnlyValidArgs,
 }
-
-func init() {
-	newExtensionCmd.AddCommand(NewGoExtensionCmd())
-	newExtensionCmd.AddCommand(NewRustExtensionCmd())
-	rootCmd.AddCommand(newExtensionCmd)
-}
