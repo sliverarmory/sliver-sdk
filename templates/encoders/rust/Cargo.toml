@@ -1,13 +1,13 @@
 [package]
-name = "rename"
+name = "{{.EncoderName}}"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
 # cdylib builds a a %.wasm file with `cargo build --release --target wasm32-unknown-unknown`
 crate-type = ["cdylib"]
-name = "rename"
-path = "rename.rs"
+name = "{{.EncoderName}}"
+path = "{{.EncoderName}}.rs"
 
 [dependencies]
 # wee_aloc is a WebAssembly optimized allocator, which is needed to use non-numeric types like strings.
