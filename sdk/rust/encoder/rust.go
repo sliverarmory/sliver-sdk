@@ -1,4 +1,4 @@
-package rust_encoder
+package rustenc
 
 /*
 	Sliver Implant Framework
@@ -32,29 +32,30 @@ import (
 
 const (
 	encPlaceholder = "rename"
-	rustFolderName = "rust"
+	rustFolderName = "encoders/rust"
 )
 
 type RustEncoder struct {
 	EncoderName string
 }
 
-func validateEncName(extName string) bool {
+func validateEncName(encName string) bool {
 	regex := regexp.MustCompile(`[^a-zA-Z0-9_]+`)
-	return !regex.Match([]byte(extName))
+	return !regex.Match([]byte(encName))
 }
 
-func RenderRustTemplate(extName string) ([]byte, error) {
-	if !validateEncName(extName) {
-		return nil, sdk.ErrInvalidExtName
+func RenderRustTemplate(encName string) ([]byte, error) {
+	if !validateEncName(encName) {
+		return nil, sdk.ErrInvalidName
 	}
 
 	buf := new(bytes.Buffer)
 	zipWriter := zip.NewWriter(buf)
 
+	// Walk the templates directory and write each file to the zip archive
 	walkErr := fs.WalkDir(templates.RustTrafficEncoderTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
 		zipPath := path
-
+		// remove the top level "rust" folder
 		zipPath = strings.Replace(zipPath, rustFolderName+"/", "", 1)
 		if zipPath == rustFolderName {
 			return nil
@@ -63,18 +64,18 @@ func RenderRustTemplate(extName string) ([]byte, error) {
 			zipPath += "/"
 		}
 
-		zipPath = strings.ReplaceAll(zipPath, encPlaceholder, extName)
+		zipPath = strings.ReplaceAll(zipPath, encPlaceholder, encName)
 		f, zipErr := zipWriter.Create(zipPath)
 		if zipErr != nil {
 			return zipErr
 		}
 		if !d.IsDir() {
-			fTemp, parseErr := template.ParseFS(templates.RustExtensionTemplates, path)
+			fTemp, parseErr := template.ParseFS(templates.RustTrafficEncoderTemplates, path)
 			if err != nil {
 				return parseErr
 			}
 			data := RustEncoder{
-				EncoderName: extName,
+				EncoderName: encName,
 			}
 			execErr := fTemp.Execute(f, data)
 			if err != nil {

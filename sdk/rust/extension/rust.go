@@ -32,7 +32,7 @@ import (
 
 const (
 	extPlaceholder = "myextension"
-	rustFolderName = "rust"
+	rustFolderName = "extensions/rust"
 )
 
 type RustExtension struct {
@@ -46,16 +46,16 @@ func validateExtname(extName string) bool {
 
 func RenderRustTemplate(extName string) ([]byte, error) {
 	if !validateExtname(extName) {
-		return nil, sdk.ErrInvalidExtName
+		return nil, sdk.ErrInvalidName
 	}
 
 	buf := new(bytes.Buffer)
 	zipWriter := zip.NewWriter(buf)
-	// Add go.mod
+
 	// Walk the templates directory and write each file to the zip archive
 	walkErr := fs.WalkDir(templates.RustExtensionTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
 		zipPath := path
-		// remove the top level "go" folder
+		// remove the top level "rust" folder
 		zipPath = strings.Replace(zipPath, rustFolderName+"/", "", 1)
 		if zipPath == rustFolderName {
 			return nil
@@ -63,7 +63,7 @@ func RenderRustTemplate(extName string) ([]byte, error) {
 		if d.IsDir() {
 			zipPath += "/"
 		}
-		// rename the pkg/myextension/myextension.go file and directory
+
 		zipPath = strings.ReplaceAll(zipPath, extPlaceholder, extName)
 		f, zipErr := zipWriter.Create(zipPath)
 		if zipErr != nil {

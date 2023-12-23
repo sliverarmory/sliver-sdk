@@ -55,7 +55,7 @@ func validatePkgName(pkgName string) bool {
 func RenderGoTemplate(pkgName, extName, goVersion string) ([]byte, error) {
 
 	if !validateExtname(extName) {
-		return nil, sdk.ErrInvalidExtName
+		return nil, sdk.ErrInvalidName
 	}
 	if !validatePkgName(pkgName) {
 		return nil, sdk.ErrInvalidPackageName
