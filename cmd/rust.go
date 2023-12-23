@@ -1,10 +1,10 @@
-package rustext
+package cmd
 
 import (
 	"errors"
 	"os"
 
-	"github.com/bishopfox/sliver-sdk/sdk/rustext"
+	rustext "github.com/bishopfox/sliver-sdk/sdk/rust/extension"
 	"github.com/spf13/cobra"
 )
 

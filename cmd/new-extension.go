@@ -4,8 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"github.com/bishopfox/sliver-sdk/cmd/goext"
-	"github.com/bishopfox/sliver-sdk/cmd/rustext"
 	"github.com/spf13/cobra"
 )
 
@@ -20,7 +18,7 @@ var newExtensionCmd = &cobra.Command{
 }
 
 func init() {
-	newExtensionCmd.AddCommand(goext.NewGoExtensionCmd())
-	newExtensionCmd.AddCommand(rustext.NewRustExtensionCmd())
+	newExtensionCmd.AddCommand(NewGoExtensionCmd())
+	newExtensionCmd.AddCommand(NewRustExtensionCmd())
 	rootCmd.AddCommand(newExtensionCmd)
 }

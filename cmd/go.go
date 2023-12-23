@@ -1,10 +1,10 @@
-package goext
+package cmd
 
 import (
 	"errors"
 	"os"
 
-	"github.com/bishopfox/sliver-sdk/sdk/goext"
+	goext "github.com/bishopfox/sliver-sdk/sdk/go/extension"
 	"github.com/spf13/cobra"
 )
 

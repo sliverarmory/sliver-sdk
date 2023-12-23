@@ -14,7 +14,7 @@ import (
 
 const (
 	extPlaceholder   = "myextension"
-	goFolderName     = "go"
+	goFolderName     = "extensions/go"
 	defaultGoVersion = "1.21"
 )
 
