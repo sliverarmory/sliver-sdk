@@ -22,7 +22,8 @@ import (
 	"errors"
 	"os"
 
-	rustext "github.com/bishopfox/sliver-sdk/sdk/rust/extension"
+	rustenc "github.com/sliverarmory/sliver-sdk/sdk/rust/encoder"
+	rustext "github.com/sliverarmory/sliver-sdk/sdk/rust/extension"
 	"github.com/spf13/cobra"
 )
 
@@ -44,11 +45,11 @@ EXTENSION_NAME can only contain alphanumeric characters and underscores.`,
 			if err != nil {
 				return err
 			}
-			err = os.WriteFile(extName+".zip", zipData, 0644)
+			err = os.WriteFile(extName+"_extension.zip", zipData, 0644)
 			if err != nil {
 				return err
 			}
-			cmd.Printf("[*] Your extension package ready: %s.zip\n", extName)
+			cmd.Printf("[*] Your extension package ready: %s_extension.zip\n", extName)
 			return nil
 		},
 	}
@@ -72,15 +73,15 @@ ENCODER_NAME can only contain alphanumeric characters and underscores.`,
 				return errors.New("invalid number of arguments")
 			}
 			encName := args[0]
-			// zipData, err := rustext.RenderRustTemplate(encName)
-			// if err != nil {
-			// 	return err
-			// }
-			// err = os.WriteFile(encName+".zip", zipData, 0644)
-			// if err != nil {
-			// 	return err
-			// }
-			cmd.Printf("[*] Your encoder package ready: %s.zip\n", encName)
+			zipData, err := rustenc.RenderRustTemplate(encName)
+			if err != nil {
+				return err
+			}
+			err = os.WriteFile(encName+"_encoder.zip", zipData, 0644)
+			if err != nil {
+				return err
+			}
+			cmd.Printf("[*] Your encoder package ready: %s_encoder.zip\n", encName)
 			return nil
 		},
 	}

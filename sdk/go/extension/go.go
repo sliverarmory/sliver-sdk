@@ -26,8 +26,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/bishopfox/sliver-sdk/sdk"
-	"github.com/bishopfox/sliver-sdk/templates"
+	"github.com/sliverarmory/sliver-sdk/sdk"
+	"github.com/sliverarmory/sliver-sdk/templates"
 )
 
 const (

@@ -37,6 +37,8 @@ func init() {
 
 	newEncoderCmd.AddCommand(NewRustEncoderCmd())
 	rootCmd.AddCommand(newEncoderCmd)
+
+	rootCmd.AddCommand(versionCmd)
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.

@@ -22,7 +22,7 @@ import (
 	"errors"
 	"os"
 
-	goext "github.com/bishopfox/sliver-sdk/sdk/go/extension"
+	goext "github.com/sliverarmory/sliver-sdk/sdk/go/extension"
 	"github.com/spf13/cobra"
 )
 

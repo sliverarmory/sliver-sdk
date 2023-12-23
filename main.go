@@ -18,7 +18,7 @@
 
 package main
 
-import "github.com/bishopfox/sliver-sdk/cmd"
+import "github.com/sliverarmory/sliver-sdk/cmd"
 
 func main() {
 	cmd.Execute()
