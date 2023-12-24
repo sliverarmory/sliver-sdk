@@ -1,4 +1,4 @@
-module github.com/bishopfox/sliver-sdk
+module github.com/sliverarmory/sliver-sdk
 
 go 1.21.4
 

@@ -19,33 +19,15 @@ package cmd
 */
 
 import (
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "sliver-sdk",
-	Short: "Small utility to bootstrap Sliver extensions writing",
-}
-
-func init() {
-	newExtensionCmd.AddCommand(NewGoExtensionCmd())
-	newExtensionCmd.AddCommand(NewRustExtensionCmd())
-	rootCmd.AddCommand(newExtensionCmd)
-
-	newEncoderCmd.AddCommand(NewRustEncoderCmd())
-	rootCmd.AddCommand(newEncoderCmd)
-
-	rootCmd.AddCommand(versionCmd)
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	err := rootCmd.Execute()
-	if err != nil {
-		os.Exit(1)
-	}
+// newExtensionCmd represents the newExtension command
+var newExtensionCmd = &cobra.Command{
+	Use:   "new-extension",
+	Short: "Create a new extension",
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+	ValidArgs: []string{"go", "rust", "nim", "c"},
+	Args:      cobra.OnlyValidArgs,
 }

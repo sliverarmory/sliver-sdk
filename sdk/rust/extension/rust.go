@@ -1,5 +1,23 @@
 package rustext
 
+/*
+	Sliver Implant Framework
+	Copyright (C) 2023  Bishop Fox
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 import (
 	"archive/zip"
 	"bytes"
@@ -8,13 +26,13 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/bishopfox/sliver-sdk/sdk"
-	"github.com/bishopfox/sliver-sdk/templates"
+	"github.com/sliverarmory/sliver-sdk/sdk"
+	"github.com/sliverarmory/sliver-sdk/templates"
 )
 
 const (
 	extPlaceholder = "myextension"
-	rustFolderName = "rust"
+	rustFolderName = "extensions/rust"
 )
 
 type RustExtension struct {
@@ -28,16 +46,16 @@ func validateExtname(extName string) bool {
 
 func RenderRustTemplate(extName string) ([]byte, error) {
 	if !validateExtname(extName) {
-		return nil, sdk.ErrInvalidExtName
+		return nil, sdk.ErrInvalidName
 	}
 
 	buf := new(bytes.Buffer)
 	zipWriter := zip.NewWriter(buf)
-	// Add go.mod
+
 	// Walk the templates directory and write each file to the zip archive
-	walkErr := fs.WalkDir(templates.RustTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
+	walkErr := fs.WalkDir(templates.RustExtensionTemplates, rustFolderName, func(path string, d fs.DirEntry, err error) error {
 		zipPath := path
-		// remove the top level "go" folder
+		// remove the top level "rust" folder
 		zipPath = strings.Replace(zipPath, rustFolderName+"/", "", 1)
 		if zipPath == rustFolderName {
 			return nil
@@ -45,14 +63,14 @@ func RenderRustTemplate(extName string) ([]byte, error) {
 		if d.IsDir() {
 			zipPath += "/"
 		}
-		// rename the pkg/myextension/myextension.go file and directory
+
 		zipPath = strings.ReplaceAll(zipPath, extPlaceholder, extName)
 		f, zipErr := zipWriter.Create(zipPath)
 		if zipErr != nil {
 			return zipErr
 		}
 		if !d.IsDir() {
-			fTemp, parseErr := template.ParseFS(templates.RustTemplates, path)
+			fTemp, parseErr := template.ParseFS(templates.RustExtensionTemplates, path)
 			if err != nil {
 				return parseErr
 			}
