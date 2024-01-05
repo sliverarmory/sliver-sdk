@@ -37,6 +37,14 @@
                     "arch": "386",
                     "path": "ext.x86.dll"
                 }
+            ],
+            "arguments": [
+                {
+                    "type": "string",
+                    "optional": false,
+                    "desc": "param",
+                    "name": "param"
+                }
             ]
         }
     ]
