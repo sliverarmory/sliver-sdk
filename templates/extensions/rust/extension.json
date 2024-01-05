@@ -6,7 +6,7 @@
     "repo_url": "some URL",
     "commands": [
         {
-            "command_name": "my-ext-cmd1",
+            "command_name": "{{.ExtensionName}}",
             "help": "my super command 1",
             "entrypoint": "start",
             "files": [
@@ -23,10 +23,16 @@
             ],
             "arguments": [
                 {
+                    "type": "int",
+                    "optional": false,
+                    "desc": "int arg",
+                    "name": "param1"
+                },
+                {
                     "type": "string",
                     "optional": false,
-                    "desc": "param",
-                    "name": "param"
+                    "desc": "string arg",
+                    "name": "param 2"
                 }
             ]
         }

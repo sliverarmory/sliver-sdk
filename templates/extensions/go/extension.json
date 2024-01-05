@@ -40,6 +40,12 @@
             ],
             "arguments": [
                 {
+                    "type": "int",
+                    "optional": false,
+                    "desc": "param",
+                    "name": "param"
+                },
+                {
                     "type": "string",
                     "optional": false,
                     "desc": "param",
