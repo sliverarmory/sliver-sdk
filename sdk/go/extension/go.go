@@ -21,10 +21,10 @@ package goext
 import (
 	"archive/zip"
 	"bytes"
-	"html/template"
 	"io/fs"
 	"regexp"
 	"strings"
+	"text/template"
 
 	"github.com/sliverarmory/sliver-sdk/sdk"
 	"github.com/sliverarmory/sliver-sdk/templates"
@@ -130,7 +130,7 @@ func RenderGoTemplate(pkgName, extName, goVersion string) ([]byte, error) {
 func genGoMod(goExt GoExtension) ([]byte, error) {
 	goModTmpl := `module {{.PackageName}}
 
-go {{.GoVersion}}}
+go {{.GoVersion}}
 
 require (
 	golang.org/x/text v0.14.0
