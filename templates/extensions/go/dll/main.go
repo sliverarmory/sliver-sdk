@@ -3,8 +3,7 @@ package main
 import "C"
 import (
 	"{{.PackageName}}/pkg/parser"
-	"syscall"
-	"unsafe"
+
 
 	"{{.PackageName}}/pkg/{{.ExtensionName}}"
 )
@@ -53,10 +52,10 @@ func Run(data uintptr, dataLen uintptr, callback uintptr) uintptr {
 
 	output, err := {{.ExtensionName}}.DoStuff(stringArg)
 	if err != nil {
-		sendError(err, callback)
+		outBuff.SendError(err)
 		return Error
 	}
-	sendOutput(output, callback)
+	outBuff.SendOutput(output)
 	return Success
 }
 

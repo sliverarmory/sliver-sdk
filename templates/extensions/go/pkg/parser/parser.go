@@ -44,7 +44,7 @@ func (dp *DataParser) GetWString() (string, error) {
 		return "", err
 	}
 	decoder := unicode.UTF16(unicode.LittleEndian, unicode.IgnoreBOM).NewDecoder()
-	return decoder.Bytes(outStr[:len(outStr)-2]) //strip trailing nulls before decoding
+	return decoder.String(string(outStr[:len(outStr)-2])) //strip trailing nulls before decoding
 }
 
 // GetData returns a slice of bytes. The underlying data could be a string, a file, etc.
