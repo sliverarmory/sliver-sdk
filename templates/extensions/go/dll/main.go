@@ -52,10 +52,10 @@ func Run(data uintptr, dataLen uintptr, callback uintptr) uintptr {
 
 	output, err := {{.ExtensionName}}.DoStuff(stringArg)
 	if err != nil {
-		parser.SendError(err, callback)
+		outBuff.SendError(err, callback)
 		return Error
 	}
-	parser.SendOutput(output, callback)
+	outBuff.SendOutput(output, callback)
 	return Success
 }
 
